@@ -3,6 +3,9 @@ import { Config, MeiliSearch } from 'meilisearch';
 import _ from 'lodash';
 import { WarningPageData } from '@/src/store';
 import { toast } from './toast';
+import i18n from './i18n';
+
+const t = i18n.t;
 
 export const testConnection = async (cfg: Config) => {
   showConnectionTestLoader();
@@ -13,18 +16,16 @@ export const testConnection = async (cfg: Config) => {
     console.debug('[meilisearch connection test]', stats);
   } catch (e) {
     console.warn('[meilisearch connection test error]', e);
-    toast('Connection fail, go check your config! 🤥', {
-      type: 'warning',
-    });
+    toast.error(t('instance:connection_failed'));
+    // stop loading when error.
+    hiddenConnectionTestLoader();
     throw e;
   }
   // stop loading
   hiddenConnectionTestLoader();
   if (_.isEmpty(stats)) {
-    const msg = 'Connection fail, go check your config! 🤥';
-    toast(msg, {
-      type: 'warning',
-    });
+    const msg = t('instance:connection_failed');
+    toast.error(msg);
     console.error(msg, stats);
     throw new Error('msg');
   }
@@ -36,8 +37,7 @@ export const testConnection = async (cfg: Config) => {
 export const validateKeysRouteAvailable = (apiKey?: string): null | WarningPageData => {
   if (_.isEmpty(apiKey)) {
     return {
-      prompt:
-        'Meilisearch is running without a master key.\nTo access this API endpoint, you must have set a master key at launch.',
+      prompt: t('instance:no_master_key_error'),
     };
   } else {
     return null;

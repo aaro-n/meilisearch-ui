@@ -2,9 +2,10 @@ import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import { IconPlus, IconCircleMinus, IconArrowUp, IconArrowDown } from '@tabler/icons-react';
 import { PropsWithoutRef, useCallback, useMemo, useState } from 'react';
-import { openConfirmModal } from '@mantine/modals';
+import { modals } from '@mantine/modals';
 import _ from 'lodash';
 import { arrayMove } from '@/src/utils/array';
+import { useTranslation } from 'react-i18next';
 
 export function ArrayInput<V extends string>({
   defaultValue,
@@ -17,6 +18,8 @@ export function ArrayInput<V extends string>({
   onMutation: (value: V[]) => void;
   moveable?: boolean;
 }>) {
+  const { t } = useTranslation('instance');
+
   const [array, setArray] = useState<V[]>(defaultValue);
   const [isAdding, setIsAdding] = useState<boolean>(false);
 
@@ -64,26 +67,45 @@ export function ArrayInput<V extends string>({
   const onClickItemDel = useCallback(
     (index: number) => {
       console.debug('🚀 ~ file: ArrayInput onClickItemDel', index);
-
-      openConfirmModal({
-        title: 'Remove this item',
+      const modalId = 'removeItemModal';
+      modals.open({
+        modalId,
+        title: t('setting.index.config.remove_this_item'),
         centered: true,
-        children: <p>Are you sure you want to remove "{array[index]}" ?</p>,
-        labels: { confirm: 'Remove', cancel: 'Cancel' },
-        confirmProps: { color: 'red' },
-        onConfirm: async () => {
-          const updated = _.without(array, array[index]);
-          setArray(updated);
-          onMutation(updated);
-        },
+        children: (
+          <div className="flex flex-col gap-6">
+            <p>{t('setting.index.config.are_you_sure_you_want_to_remove_item', { item: array[index] })}</p>{' '}
+            <div className="flex gap-3">
+              <button
+                className="btn sm solid danger flex-1"
+                onClick={() => {
+                  const updated = _.without(array, array[index]);
+                  setArray(updated);
+                  onMutation(updated);
+                  modals.close(modalId);
+                }}
+              >
+                {t('confirm')}
+              </button>
+              <button
+                className="btn sm solid bw flex-1"
+                onClick={() => {
+                  modals.close(modalId);
+                }}
+              >
+                {t('cancel')}
+              </button>
+            </div>
+          </div>
+        ),
       });
     },
-    [array, onMutation]
+    [array, onMutation, t]
   );
 
   return useMemo(
     () => (
-      <div className={clsx(className, 'flex flex-col gap-2')}>
+      <div className={clsx(className, 'flex flex-col gap-6')}>
         {(isAdding ? array : defaultValue).map((item, i) => (
           <div
             key={i}
@@ -113,7 +135,7 @@ export function ArrayInput<V extends string>({
               onSubmit();
             }}
           >
-            Save
+            {t('save')}
           </button>
           <button
             className="btn outline sm bw"
@@ -122,7 +144,7 @@ export function ArrayInput<V extends string>({
               onCompleteInput();
             }}
           >
-            Cancel
+            {t('cancel')}
           </button>
         </form>
         <button className={clsx(isAdding && 'hidden', 'btn primary outline w-full')} onClick={() => setIsAdding(true)}>
@@ -132,6 +154,7 @@ export function ArrayInput<V extends string>({
     ),
     [
       addForm,
+      t,
       array,
       className,
       defaultValue,

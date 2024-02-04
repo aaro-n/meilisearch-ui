@@ -6,8 +6,11 @@ import { Settings } from 'meilisearch';
 import { IndexSettingConfigComponentProps } from '..';
 import MonacoEditor from '@monaco-editor/react';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 export const Editor: FC<IndexSettingConfigComponentProps> = ({ client, host, className, toggleLoading }) => {
+  const { t } = useTranslation('instance');
+
   const editorRef = useRef<any>(null);
   const [isSettingsEditing, setIsSettingsEditing] = useState<boolean>(false);
 
@@ -29,46 +32,44 @@ export const Editor: FC<IndexSettingConfigComponentProps> = ({ client, host, cla
     [isSettingsEditing]
   );
 
-  const querySettings = useQuery(
-    ['settings', host, client.uid],
-    async () => {
+  const querySettings = useQuery({
+    queryKey: ['settings', host, client.uid],
+    queryFn: async () => {
       showRequestLoader();
       return await client.getSettings();
     },
-    {
-      keepPreviousData: true,
-      refetchInterval: 5000,
-      refetchOnMount: 'always',
-      onSuccess: (data) => {
-        // change display data when not editing
-        !isSettingsEditing && resetSettings(data);
-      },
-      onSettled: () => {
-        hiddenRequestLoader();
-      },
+  });
+
+  useEffect(() => {
+    if (querySettings.isSuccess) {
+      // change display data when not editing
+      !isSettingsEditing && resetSettings(querySettings.data);
     }
-  );
+    if (!querySettings.isFetching) {
+      hiddenRequestLoader();
+    }
+  }, [isSettingsEditing, querySettings.data, querySettings.isFetching, querySettings.isSuccess, resetSettings]);
+
   const onSettingJsonEditorUpdate = useCallback(
     (value?: string) => value && setIndexSettingInputData(JSON.parse(value) as Settings),
     [setIndexSettingInputData]
   );
 
-  const settingsMutation = useMutation(
-    ['settings', host, client.uid],
-    async (variables: Settings) => {
+  const settingsMutation = useMutation({
+    mutationKey: ['settings', host, client.uid],
+    mutationFn: async (variables: Settings) => {
       showRequestLoader();
       return await client.updateSettings(variables);
     },
-    {
-      onSuccess: (t) => {
-        showTaskSubmitNotification(t);
-        setTimeout(() => querySettings.refetch(), 450);
-      },
-      onSettled: () => {
-        hiddenRequestLoader();
-      },
-    }
-  );
+
+    onSuccess: (t) => {
+      showTaskSubmitNotification(t);
+      setTimeout(() => querySettings.refetch(), 450);
+    },
+    onSettled: () => {
+      hiddenRequestLoader();
+    },
+  });
 
   const onSaveSettings = useCallback(() => {
     setIsSettingsEditing(false);
@@ -76,15 +77,15 @@ export const Editor: FC<IndexSettingConfigComponentProps> = ({ client, host, cla
   }, [indexSettingInputData, settingsMutation]);
 
   useEffect(() => {
-    const isLoading = querySettings.isLoading || querySettings.isFetching || settingsMutation.isLoading;
+    const isLoading = querySettings.isLoading || querySettings.isFetching || settingsMutation.isPending;
     toggleLoading(isLoading);
-  }, [querySettings.isFetching, querySettings.isLoading, settingsMutation.isLoading, toggleLoading]);
+  }, [querySettings.isFetching, querySettings.isLoading, settingsMutation.isPending, toggleLoading]);
 
   return useMemo(
     () => (
       <div className={clsx(className, 'p-1')}>
         <div className={`flex items-center gap-4 w-full pb-2`}>
-          <p className={`text-lg font-medium`}>Configuration JSON</p>
+          <p className={`text-lg font-medium`}>JSON {t('setting.index.config.label')}</p>
           {!isSettingsEditing && (
             <button
               className={'btn outline xs primary'}
@@ -92,7 +93,7 @@ export const Editor: FC<IndexSettingConfigComponentProps> = ({ client, host, cla
                 onClickEditSettings();
               }}
             >
-              Edit
+              {t('edit')}
             </button>
           )}
           {isSettingsEditing && (
@@ -102,7 +103,7 @@ export const Editor: FC<IndexSettingConfigComponentProps> = ({ client, host, cla
                 onSaveSettings();
               }}
             >
-              Save
+              {t('save')}
             </button>
           )}
           {isSettingsEditing && (
@@ -112,7 +113,7 @@ export const Editor: FC<IndexSettingConfigComponentProps> = ({ client, host, cla
                 resetSettings();
               }}
             >
-              Cancel
+              {t('cancel')}
             </button>
           )}
         </div>
@@ -134,6 +135,7 @@ export const Editor: FC<IndexSettingConfigComponentProps> = ({ client, host, cla
     ),
     [
       className,
+      t,
       indexSettingDisplayData,
       isSettingsEditing,
       onClickEditSettings,

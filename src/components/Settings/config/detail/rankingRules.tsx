@@ -5,11 +5,14 @@ import { FC, useEffect, useMemo } from 'react';
 import { IndexSettingConfigComponentProps } from '../..';
 import { ArrayInput } from './arrayInput';
 import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 export const RankingRules: FC<IndexSettingConfigComponentProps> = ({ client, className, host, toggleLoading }) => {
+  const { t } = useTranslation('instance');
+
   const query = useQuery({
     queryKey: ['getRankingRules', host, client.uid],
-    refetchInterval: 4500,
+
     async queryFn(ctx) {
       return await client.getRankingRules();
     },
@@ -28,26 +31,23 @@ export const RankingRules: FC<IndexSettingConfigComponentProps> = ({ client, cla
   });
 
   useEffect(() => {
-    const isLoading = query.isLoading || query.isFetching || mutation.isLoading;
+    const isLoading = query.isLoading || query.isFetching || mutation.isPending;
     toggleLoading(isLoading);
-  }, [mutation.isLoading, query.isFetching, query.isLoading, toggleLoading]);
+  }, [mutation.isPending, query.isFetching, query.isLoading, toggleLoading]);
 
   return useMemo(
     () => (
       <div className={clsx(className)}>
         <h2 className="font-semibold">Ranking Rules</h2>
         <span className="text-sm flex gap-2">
-          <p>
-            Ranking rules are built-in rules that rank search results according to certain criteria. They are applied in
-            the same order in which they appear in the rankingRules array.
-          </p>
+          <p>{t('setting.index.config.rankingRules.description')}</p>
           <a
             className="link info text-info-800"
             href="https://docs.meilisearch.com/learn/core_concepts/relevancy.html"
             target={'_blank'}
             rel="noreferrer"
           >
-            Learn more
+            {t('learn_more')}
           </a>
         </span>
         <ArrayInput
@@ -60,6 +60,6 @@ export const RankingRules: FC<IndexSettingConfigComponentProps> = ({ client, cla
         />
       </div>
     ),
-    [className, mutation, query.data]
+    [t, className, mutation, query.data]
   );
 };

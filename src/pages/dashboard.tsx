@@ -6,15 +6,18 @@ import { Footer } from '@/src/components/Footer';
 import { useForm } from '@mantine/form';
 import { IconBooks, IconCirclePlus, IconCircleX, IconKey, IconListCheck, IconPencilMinus } from '@tabler/icons-react';
 import { testConnection, validateKeysRouteAvailable } from '@/src/utils/conn';
-import { openConfirmModal } from '@mantine/modals';
+import { modals } from '@mantine/modals';
 import { getTimeText } from '@/src/utils/text';
 import _ from 'lodash';
 import { useNavigatePreCheck } from '@/src/hooks/useRoutePreCheck';
 import { useCurrentInstance } from '../hooks/useCurrentInstance';
+import { useTranslation } from 'react-i18next';
 
 const instanceCardClassName = `col-span-1 h-28 rounded-lg`;
 
 function Dashboard() {
+  const { t } = useTranslation('dashboard');
+
   const navigate = useNavigatePreCheck(([to], opt) => {
     console.debug('dashboard', 'navigate', to, opt?.currentInstance);
     if (typeof to === 'string' && /\/keys$/.test(to)) {
@@ -107,17 +110,41 @@ function Dashboard() {
 
   const onClickRemoveInstance = useCallback(
     (ins: Instance) => {
-      openConfirmModal({
-        title: 'Remove this instance',
+      const modalId = 'removeInsModal';
+      modals.open({
+        modalId,
+        title: t('instance.remove.title'),
         centered: true,
-        children: <p>Are you sure you want to remove this instance ({ins.name})?</p>,
-        labels: { confirm: 'Yes', cancel: 'No' },
-        onConfirm: () => {
-          removeInstance(ins.id);
-        },
+        children: (
+          <div className="flex flex-col gap-6">
+            <p>
+              {t('instance.remove.tip')} ({ins.name})?
+            </p>
+            <div className="flex gap-3">
+              <button
+                className="btn sm solid danger flex-1"
+                onClick={() => {
+                  removeInstance(ins.id);
+
+                  modals.close(modalId);
+                }}
+              >
+                {t('confirm')}
+              </button>
+              <button
+                className="btn sm solid bw flex-1"
+                onClick={() => {
+                  modals.close(modalId);
+                }}
+              >
+                {t('cancel')}
+              </button>
+            </div>
+          </div>
+        ),
       });
     },
-    [removeInstance]
+    [removeInstance, t]
   );
 
   const instancesList = useMemo(() => {
@@ -144,7 +171,7 @@ function Dashboard() {
               </p>
             </div>
             <div className={`flex gap-x-3`}>
-              <Tooltip position={'left'} label="Edit">
+              <Tooltip position={'left'} label={t('edit')}>
                 <ActionIcon
                   variant="light"
                   color="yellow"
@@ -164,8 +191,10 @@ function Dashboard() {
             </div>
           </div>
           <div className={`w-full flex justify-end items-center gap-x-3`}>
-            <p className={`mr-auto text-neutral-500 text-sm`}>Updated at {getTimeText(instance.updatedTime)}</p>
-            <Tooltip position={'bottom'} label="Indexes">
+            <p className={`mr-auto text-neutral-500 text-sm`}>
+              {t('instance.updated_at')} {getTimeText(instance.updatedTime)}
+            </p>
+            <Tooltip position={'bottom'} label={t('indexes')}>
               <ActionIcon
                 variant="light"
                 color="violet"
@@ -174,7 +203,7 @@ function Dashboard() {
                 <IconBooks size={24} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip position={'bottom'} label="Tasks">
+            <Tooltip position={'bottom'} label={t('tasks')}>
               <ActionIcon
                 variant="light"
                 color="blue"
@@ -183,10 +212,10 @@ function Dashboard() {
                 <IconListCheck size={24} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip position={'bottom'} label="Keys">
+            <Tooltip position={'bottom'} label={t('keys')}>
               <ActionIcon
                 variant="light"
-                color="purple"
+                color="grape"
                 onClick={() => onClickInstance(instance, `/ins/${instance.id}/keys`)}
               >
                 <IconKey size={24} />
@@ -196,13 +225,13 @@ function Dashboard() {
         </div>
       );
     });
-  }, [instanceForm, instances, onClickInstance, onClickRemoveInstance]);
+  }, [instanceForm, instances, onClickInstance, onClickRemoveInstance, t]);
 
   return (
     <div className="bg-mount full-page justify-center items-center gap-y-6">
-      <div className={`w-1/4 h-2/3 flex flex-col justify-center items-center gap-y-10`}>
+      <div className={`w-1/2 2xl:w-1/4 h-2/3 flex flex-col justify-center items-center gap-y-10`}>
         <Logo />
-        <p className={`text-brand-2 font-bold xl:text-3xl text-xl w-screen text-center`}>A Beautiful Meilisearch UI</p>
+        <p className={`text-brand-2 font-bold xl:text-3xl text-xl w-screen text-center`}>{t('slogan')}</p>
         <div className={`grid grid-cols-1 gap-y-3 w-full p-1  overflow-y-scroll`}>
           {instancesList}
           <div
@@ -231,49 +260,37 @@ function Dashboard() {
         padding="xl"
         withCloseButton={false}
       >
-        <p className={`text-center font-semibold text-lg`}>
-          {instanceFormType === 'edit' ? 'Edit Instance' : 'Add New Instance'}
-        </p>
+        <p className={`text-center font-semibold text-lg`}>{t(`instance.form.title.${instanceFormType}`)}</p>
         <form className={`flex flex-col gap-y-6 w-full`} onSubmit={instanceForm.onSubmit(onSubmitInstance)}>
           <TextInput
             autoFocus
             radius="md"
             size={'lg'}
-            label={<p className={'text-brand-5 pb-2 text-lg'}>Name</p>}
-            placeholder="name your instance, should be different from others"
+            label={<p className={'text-brand-5 pb-2 text-lg'}>{t('instance.form.name.label')}</p>}
+            placeholder={t('instance.form.name.placeholder')}
             {...instanceForm.getInputProps('name')}
           />
-          <Tooltip
-            position={'bottom-start'}
-            multiline
-            width={400}
-            label={`Remember enable CORS in your instance server for this ui domain first`}
-          >
+          <Tooltip position={'bottom-start'} multiline label={t('instance.form.host.tip')}>
             <Autocomplete
               radius="md"
               size={'lg'}
-              label={<p className={'text-brand-5 pb-2 text-lg'}>Host</p>}
+              label={<p className={'text-brand-5 pb-2 text-lg'}>{t('instance.form.host.label')}</p>}
               placeholder="http://127.0.0.1:7700"
               data={instances.map((i) => i.host)}
               {...instanceForm.getInputProps('host')}
             />
           </Tooltip>
-          <Tooltip
-            position={'bottom-start'}
-            multiline
-            width={400}
-            label="Don't care! Your instance config will only be store in your local browser"
-          >
+          <Tooltip position={'bottom-start'} multiline label={t('instance.form.api_key.tip')}>
             <PasswordInput
               placeholder="masterKey"
               radius="md"
               size={'lg'}
-              label={<p className={'text-brand-5 pb-2 text-lg'}>Api Key</p>}
+              label={<p className={'text-brand-5 pb-2 text-lg'}>{t('instance.form.api_key.label')}</p>}
               {...instanceForm.getInputProps('apiKey')}
             />
           </Tooltip>
-          <button type="submit" className="btn primary outline" disabled={isSubmitInstanceLoading}>
-            {instanceFormType === 'edit' ? 'Confirm edit' : 'Add this instance'}
+          <button type="submit" className="btn primary outline w-full" disabled={isSubmitInstanceLoading}>
+            {t('confirm')}
           </button>
           <Footer />
         </form>

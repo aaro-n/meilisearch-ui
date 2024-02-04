@@ -11,8 +11,13 @@ import Keys from '@/src/pages/key';
 import Settings from '@/src/pages/index/setting';
 import Warning from '@/src/pages/warning';
 import { EmptyArea } from '../components/EmptyArea';
+import { UploadDoc } from '../pages/index/upload';
+import { MultiIndexSearch } from '../pages/index/multi-search';
+import { useTranslation } from 'react-i18next';
+import { Lazy } from '../components/lazy';
 
 export const AppRoutes = () => {
+  const { t } = useTranslation();
   return (
     <Suspense
       fallback={
@@ -26,15 +31,24 @@ export const AppRoutes = () => {
         <Route path="ins">
           <Route path=":insId">
             <Route path="index" element={<IndexesLayout />}>
-              <Route index element={<EmptyArea text={'Select or Create a index on the left to start'} />} />
+              <Route index element={<EmptyArea text={t('document:empty_area_tip')} />} />
               <Route path="create" element={<CreateIndex />} />
               <Route path=":indexId">
-                <Route index element={<Documents />} />
+                <Route
+                  index
+                  element={
+                    <Lazy className={`h-full`}>
+                      <Documents />
+                    </Lazy>
+                  }
+                />
                 <Route path="settings" element={<Settings />} />
+                <Route path="upload" element={<UploadDoc />} />
               </Route>
             </Route>
             <Route path="tasks" element={<Tasks />} />
             <Route path="keys" element={<Keys />} />
+            <Route path="multi-search" element={<MultiIndexSearch />} />
           </Route>
         </Route>
         <Route path="warning" element={<Warning />} />

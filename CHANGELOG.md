@@ -1,5 +1,173 @@
 # Changelog
 
+## [0.6.13](https://github.com/riccox/meilisearch-ui/compare/v0.6.12...v0.6.13) (2024-01-18)
+
+
+### Bug Fixes
+
+* gh-107 rename stroke-width to strokeWidth. ([d971f53](https://github.com/riccox/meilisearch-ui/commit/d971f531868b0c1dca18816057e16c06a6b9b470))
+
+
+### Performance Improvements
+
+* search loading experience. ([79d2661](https://github.com/riccox/meilisearch-ui/commit/79d2661e1140aaa7cc4af8d6276dda07ed46d7ba))
+
+## [0.6.12](https://github.com/riccox/meilisearch-ui/compare/v0.6.11...v0.6.12) (2024-01-09)
+
+
+### Bug Fixes
+
+* set index list limit to 1000. ([f58e0d6](https://github.com/riccox/meilisearch-ui/commit/f58e0d6a0bc7989d7d4e3ff86b14ca6ee1f266cc))
+
+## [0.6.11](https://github.com/riccox/meilisearch-ui/compare/v0.6.10...v0.6.11) (2024-01-08)
+
+
+### Bug Fixes
+
+* gh-103  _geoPoint sort expression. ([e78095d](https://github.com/riccox/meilisearch-ui/commit/e78095d5a3e5e0574e236bc9447b3cce7375cbf6))
+
+## [0.6.10](https://github.com/riccox/meilisearch-ui/compare/v0.6.9...v0.6.10) (2023-12-25)
+
+
+### Bug Fixes
+
+* gh-100 locales not loaded when using base path. ([8c1b1cf](https://github.com/riccox/meilisearch-ui/commit/8c1b1cf7b4686baf78db62dcebd68b966287e812))
+
+## [0.6.9](https://github.com/riccox/meilisearch-ui/compare/v0.6.8...v0.6.9) (2023-11-14)
+
+
+### Bug Fixes
+
+* error boundary app fallback alert. ([fa4b56d](https://github.com/riccox/meilisearch-ui/commit/fa4b56d1f4223a41f7a30729995165e77fe429d2))
+
+## [0.6.8](https://github.com/riccox/meilisearch-ui/compare/v0.6.7...v0.6.8) (2023-11-04)
+
+
+### Bug Fixes
+
+* confirm btn is not visible in modals gh-93. ([8f30187](https://github.com/riccox/meilisearch-ui/commit/8f301872183fdb4cc8711750fac3907467a3f65b))
+* document card btn translation text. ([8f30187](https://github.com/riccox/meilisearch-ui/commit/8f301872183fdb4cc8711750fac3907467a3f65b))
+
+
+### Performance Improvements
+
+* change document card font size. ([8f30187](https://github.com/riccox/meilisearch-ui/commit/8f301872183fdb4cc8711750fac3907467a3f65b))
+* document card btn style. ([8f30187](https://github.com/riccox/meilisearch-ui/commit/8f301872183fdb4cc8711750fac3907467a3f65b))
+
+## [0.6.7](https://github.com/riccox/meilisearch-ui/compare/v0.6.6...v0.6.7) (2023-11-03)
+
+
+### Bug Fixes
+
+* gh-82 delete confirm modal btn. ([1d61376](https://github.com/riccox/meilisearch-ui/commit/1d6137661db2ca7ed239abc025b1368503fa178e))
+* instance i18n translation file. ([6fe7f50](https://github.com/riccox/meilisearch-ui/commit/6fe7f50687302e9ca80f33a7f4a732a9d8a40e63))
+
+
+### Performance Improvements
+
+* change header padding size & home btn radius. ([6fe7f50](https://github.com/riccox/meilisearch-ui/commit/6fe7f50687302e9ca80f33a7f4a732a9d8a40e63))
+* request loader logic. ([1d61376](https://github.com/riccox/meilisearch-ui/commit/1d6137661db2ca7ed239abc025b1368503fa178e))
+
+## [0.6.6](https://github.com/riccox/meilisearch-ui/compare/v0.6.5...v0.6.6) (2023-11-02)
+
+
+### Continuous Integration
+
+* remove docker build platform arm v6. ([7e425a0](https://github.com/riccox/meilisearch-ui/commit/7e425a098ee2ec995906c1c59d6e6efa1d17cb92))
+
+## [0.6.5](https://github.com/riccox/meilisearch-ui/compare/v0.6.4...v0.6.5) (2023-11-02)
+
+
+### Performance Improvements
+
+* add config for netlify avoid refresh page become page 404. ([b528ed6](https://github.com/riccox/meilisearch-ui/commit/b528ed634d7c5acf0b4869d78ea686c3af0db5b7))
+* use vite-react-swc. ([b528ed6](https://github.com/riccox/meilisearch-ui/commit/b528ed634d7c5acf0b4869d78ea686c3af0db5b7))
+
+
+### Miscellaneous Chores
+
+* merge gh-87. ([b528ed6](https://github.com/riccox/meilisearch-ui/commit/b528ed634d7c5acf0b4869d78ea686c3af0db5b7))
+
+## [0.6.4](https://github.com/riccox/meilisearch-ui/compare/v0.6.3...v0.6.4) (2023-09-29)
+
+
+### Continuous Integration
+
+* add checkout step for docker description upload. ([bac19c9](https://github.com/riccox/meilisearch-ui/commit/bac19c9888dd945df4ec5928ed05881664449898))
+
+## [0.6.3](https://github.com/riccox/meilisearch-ui/compare/v0.6.2...v0.6.3) (2023-09-29)
+
+
+### Continuous Integration
+
+* update release actions meta tags. ([cc4e105](https://github.com/riccox/meilisearch-ui/commit/cc4e105e7fa0a4160cae0c6e0d62e462423c374c))
+
+## [0.6.2](https://github.com/riccox/meilisearch-ui/compare/v0.6.1...v0.6.2) (2023-09-29)
+
+
+### Continuous Integration
+
+* update release actions meta tags. ([5cfe996](https://github.com/riccox/meilisearch-ui/commit/5cfe99623e5feb978f5bb46fb25ed7f86a549038))
+
+## [0.6.1](https://github.com/riccox/meilisearch-ui/compare/v0.6.0...v0.6.1) (2023-09-29)
+
+
+### Bug Fixes
+
+* gh-76 build docker image release actions for multi-platforms. ([470580e](https://github.com/riccox/meilisearch-ui/commit/470580e5f5104b512f17845296ff83e3c61a4bf6))
+
+## [0.6.0](https://github.com/riccox/meilisearch-ui/compare/v0.5.0...v0.6.0) (2023-09-27)
+
+
+### Features
+
+* add i18n support for chinese gh-60. ([40f1926](https://github.com/riccox/meilisearch-ui/commit/40f1926c41bbee68533ab2b3546e1b6c8e0cbbe8))
+
+
+### Bug Fixes
+
+* test instance connection loader. ([40f1926](https://github.com/riccox/meilisearch-ui/commit/40f1926c41bbee68533ab2b3546e1b6c8e0cbbe8))
+
+## [0.5.0](https://github.com/riccox/meilisearch-ui/compare/v0.4.1...v0.5.0) (2023-09-20)
+
+
+### Features
+
+* gh-62 larger pop-up task detail window. ([e310471](https://github.com/riccox/meilisearch-ui/commit/e310471f6573b0159b64d4c3c1c0943936951b8a))
+
+
+### Performance Improvements
+
+* add dash responsive width. ([e310471](https://github.com/riccox/meilisearch-ui/commit/e310471f6573b0159b64d4c3c1c0943936951b8a))
+
+## [0.4.1](https://github.com/riccox/meilisearch-ui/compare/v0.4.0...v0.4.1) (2023-07-03)
+
+
+### Bug Fixes
+
+* gh-57 improve search form validation. ([5f1a271](https://github.com/riccox/meilisearch-ui/commit/5f1a2716d4f479e491d388dec65c9c3831d42f0a))
+
+## [0.4.0](https://github.com/riccox/meilisearch-ui/compare/v0.3.1...v0.4.0) (2023-06-21)
+
+
+### Features
+
+* split upload page from search page. ([a6c9af2](https://github.com/riccox/meilisearch-ui/commit/a6c9af231e262328c982475a619087122aa29536))
+
+
+### Bug Fixes
+
+* downgrade typescript for build error. ([e7197f1](https://github.com/riccox/meilisearch-ui/commit/e7197f18081f23ec1edfccda298562e5791cf043))
+* gh-46 search input error toast. ([f383bbc](https://github.com/riccox/meilisearch-ui/commit/f383bbc83a526e63ac4c998379755d3b5fbc79d5))
+* instance key updatedAt display. ([833b7f6](https://github.com/riccox/meilisearch-ui/commit/833b7f6d0773feab2d25f27e7f101bf7b44658f2))
+* website logo icon. ([f90a200](https://github.com/riccox/meilisearch-ui/commit/f90a200b8147e9c047d29b7f86354c6ce2637599))
+
+
+### Performance Improvements
+
+* gh-42 updated queries refetch config. ([47e1337](https://github.com/riccox/meilisearch-ui/commit/47e133721a53f6d0953bf595857902f92034351e))
+* header item responsive. ([17db843](https://github.com/riccox/meilisearch-ui/commit/17db843b2bca4602f19bb59c32a69cd5c0b953b8))
+
 ## [0.3.1](https://github.com/riccox/meilisearch-ui/compare/v0.3.0...v0.3.1) (2023-05-18)
 
 
